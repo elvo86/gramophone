@@ -80,7 +80,7 @@ exports.extract = function(text, options){
     });
     tf.addDocument(tokenized);
     keywordsForNgram = tf.listMostFrequestTerms(0);
-    keywordsForNgram = _.select(keywordsForNgram, function(item){
+    keywordsForNgram = _.filter(keywordsForNgram, function(item){
       return usePhrase(item.term, options);
     });
     results = results.concat(keywordsForNgram);
@@ -96,7 +96,7 @@ exports.extract = function(text, options){
 
   // Convert to a list of objects sorted by tf (term frequency)
   combined = _.chain(combined)
-    .pairs()
+    .toPairs()
     .sortBy(_.last)
     .reverse()
     .map(function(combination){ return {term: combination[0], tf: combination[1] }; })
@@ -104,7 +104,7 @@ exports.extract = function(text, options){
 
   // Only return results over a given frequency (default is 2 or more)
   if (options.min){
-    combined = _.select(combined, function(result){
+    combined = _.filter(combined, function(result){
       return result.tf >= options.min;
     });
   }
@@ -130,7 +130,7 @@ exports.extract = function(text, options){
     );
   }else{
     // Return results with scores or without depending on options
-    combined =  options.score ? combined : _.pluck(combined, 'term');
+    combined =  options.score ? combined : _.map(combined, 'term');
   }
 
 
@@ -246,7 +246,7 @@ function blacklisted(term, extraStopWords){
 }
 
 function usePhrase(phrase, options){
-  return !_.detect(phrase.split(' '), function(term){
+  return !_.find(phrase.split(' '), function(term){
       return blacklisted(term, options.stopWords) && !whitelisted(term, options.startWords);
     });
 }
