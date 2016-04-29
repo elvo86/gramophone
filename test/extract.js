@@ -77,6 +77,13 @@ test('with {startWords: [word]} as option', function(t){
   t.end();
 });
 
+test('that start words aren\'t only matched when they\'re the entire ngram', function(t){
+  var options = { startWords: ['is'] };
+  var results = k.extract(text, options);
+  t.ok(results.indexOf('beep beep is') !== -1, 'treat start words as words');
+  t.end();
+});
+
 test('with {ngram: number} as option', function(t){
   var text = "test node code. And test and node and code and node. And test node code";
   var options = { ngrams: [3] };

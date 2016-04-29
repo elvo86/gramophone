@@ -234,7 +234,7 @@ Tf.prototype.listMostFrequestTerms = function(d) {
 };
 
 function whitelisted(term, startWords){
-  return startWords.indexOf(term) !== -1;
+  return _.indexOf(startWords, term) !== -1;
 }
 
 function blacklisted(term, extraStopWords){
@@ -246,8 +246,7 @@ function blacklisted(term, extraStopWords){
 }
 
 function usePhrase(phrase, options){
-  return whitelisted(phrase, options.startWords) ||
-    !_.detect(phrase.split(' '), function(term){
-      return blacklisted(term, options.stopWords);
+  return !_.detect(phrase.split(' '), function(term){
+      return blacklisted(term, options.stopWords) && !whitelisted(term, options.startWords);
     });
 }
