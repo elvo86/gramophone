@@ -246,7 +246,15 @@ function blacklisted(term, extraStopWords){
 }
 
 function usePhrase(phrase, options){
-  return !_.find(phrase.split(' '), function(term){
+  // check if any of the terms in the phrase are blacklisted and not whitelisted. If not, it's usable
+  var doUsePhrase = !_.find(phrase.split(' '), function(term){
       return blacklisted(term, options.stopWords) && !whitelisted(term, options.startWords);
     });
+  // if options specify, exclude phrases that are only startWords
+  if (doUsePhrase && options.ignoreStartWordOnlyPhrases) {
+    doUsePhrase = !_.every(phrase.split(' '), function(term){
+      return whitelisted(term, options.startWords);
+    });
+  }
+  return doUsePhrase;
 }
