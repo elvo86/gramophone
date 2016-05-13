@@ -41,6 +41,8 @@ exports.extract = function(text, options){
     options.ngrams = [1, 2, 3];
   }else if (typeof options.ngrams === 'number'){
     options.ngrams = [options.ngrams];
+  }else{
+    options.ngrams = _.map(options.ngrams, Number);
   }
   if (!options.cutoff) options.cutoff = 0.5;
   if (!options.min) options.min = 2;
@@ -92,7 +94,7 @@ exports.extract = function(text, options){
   });
 
   // Combine results from each ngram to remove redundancy phrases
-  combined = exports.combine(combinedResults, options.cutoff);
+  combined = exports.combine(combinedResults, options.cutoff, options.min);
 
   // Convert to a list of objects sorted by tf (term frequency)
   combined = _.chain(combined)
@@ -197,11 +199,16 @@ exports.transformStream = function(options){
 // was used 22 times (within the cutoff of 20 * 0.2), then it would be removed
 // from the results. If "national broadband" was used more than the cutoff,
 // e.g. 30 times, it would be left in the results.
-exports.combine = function(phrases, cutoff){
+exports.combine = function(phrases, cutoff, min){
   var combined = _.clone(phrases);
 
   _.each(_.keys(phrases), function(phrase){
-    var ngramToTry, subPhrases;
+    var ngramToTry;
+
+    // Skip this check if the composite phrase doesn't meet the minimum
+    // requirements for the results.
+    if (phrases[phrase] < min) return;
+
     ngramToTry = phrase.split(' ').length - 1;
 
     if (ngramToTry < 1) return;

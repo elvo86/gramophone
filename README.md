@@ -182,6 +182,18 @@ that respects these characters.
 keyword.extract('Lörem Ipsüm Lörem Ipsüm.', {alternativeTokenizer: true})
 ```
 
+#### Option: ignoreStartWordOnlyPhrases
+
+Setting `ignoreStartWordOnlyPhrases` to `true` will exclude phrases that are made up
+entirely of words in the `startWords` list.
+
+```js
+keyword.extract('foo but bar and not with foo but not with bar',
+  {startWords: ['but', 'not', 'with'], ignoreStartWordOnlyPhrases: true})
+```
+
+Returns `['foo but', 'bar']`
+
 --------------------------------------------------------
 <a name="stream"></a>
 ### gramophone.stream([options])

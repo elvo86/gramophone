@@ -114,6 +114,22 @@ test('with {cutoff: float} as option', function(t){
   t.end();
 });
 
+test('with {ignoreStartWordOnlyPhrases: true} as option', function(t){
+  var text = "foo but bar and not with foo but not with bar";
+  var options = {startWords: ['but', 'not', 'with'], ignoreStartWordOnlyPhrases: true};
+  var results = k.extract(text, options);
+  t.ok(t.deepEqual(results, ['foo but', 'bar']), "should not include phrases of only start words");
+  t.end();
+});
+
+test('default cutoff should not exclude component phrases when composite is below minimum', function(t){
+  var text = "foo but bar and not with foo but not with bar";
+  var options = {startWords: ['but', 'not', 'with'], ignoreStartWordOnlyPhrases: true};
+  var results = k.extract(text, options);
+  t.ok(results.indexOf('bar') > -1, "should not exclude component phrases when composite is below minimum");
+  t.end();
+});
+
 test('extract apostrophe', function (t){
   var text = "Today is 15 July - St Swithin's Day. Legend has it that if it rains on St Swithin's Day then the wet weather will continue for 40 days.";
   var options = {alternativeTokenizer: true};
