@@ -7,9 +7,12 @@ var Stream = require('stream');
 var stripTags = require('underscore.string').stripTags;
 
 // Stop word languages we support
-exports.languages = ['ar', 'bg', 'cs', 'da', 'de', 'en', 'es', 'fi', 'fr',
-                     'gr', 'it', 'jp', 'lv', 'nl', 'no', 'pl', 'pt', 'ru',
-                     'sk', 'sv', 'tr'];
+exports.languages = [ 'af', 'ar', 'bg', 'bn', 'br', 'ca', 'cs', 'da', 'de', 'el',
+                      'en', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fr', 'ga', 'gl',
+                      'gr', 'ha', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja',
+                      'jp', 'ko', 'ku', 'la', 'lt', 'lv', 'mr', 'ms', 'nl', 'no',
+                      'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'so', 'st', 'sv', 'sw',
+                      'th', 'tl', 'tr', 'uk', 'ur', 'vi', 'yo', 'zh', 'zu' ];
 
 // Extract the most frequently used phrases from the text.
 exports.extract = function(text, options){
